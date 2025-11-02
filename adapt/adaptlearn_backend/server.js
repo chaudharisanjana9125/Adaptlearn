@@ -54,3 +54,36 @@ mongoose
 
 const PORT = 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import cors from "cors";
+import progressRoutes from "./routes/progressRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import quizRoutes from "./routes/quizRoutes.js";
+
+dotenv.config();
+const app = express();
+
+// CORS fix for Render frontend
+app.use(cors({
+  origin: [
+    "https://adaptlearn-frontend.onrender.com",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
+
+app.use(express.json());
+app.use("/api/progress", progressRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/quiz", quizRoutes);
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected"))
+  .catch(err => console.log("MongoDB error:", err));
+
+app.listen(5000, () => console.log("Server running on port 5000"));
