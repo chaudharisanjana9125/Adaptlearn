@@ -148,3 +148,41 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.listen(5000, () => console.log("Server running on port 5000"));
 
+// server.js
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import cors from "cors";
+
+dotenv.config();
+const app = express();
+
+// ✅ Allow frontend domain
+app.use(cors({
+  origin: ["https://adaptlearn-frontend.onrender.com"], // your frontend URL
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
+}));
+
+app.use(express.json());
+
+// ✅ Connect to MongoDB
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log("✅ MongoDB connected successfully"))
+.catch((err) => console.log("❌ MongoDB connection error:", err));
+
+// ✅ Basic Route for Testing
+app.get("/", (req, res) => {
+  res.send("Backend is working fine!");
+});
+
+// ✅ Auth Routes (Example)
+import authRoutes from "./routes/auth.js"; // Make sure path is correct
+app.use("/api/auth", authRoutes);
+
+// ✅ Server Port
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
