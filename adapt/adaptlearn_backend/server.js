@@ -11,7 +11,9 @@ const app = express();
 
 // ✅ CORS configuration – works for both localhost and 127.0.0.1
 const corsOptions = {
-  origin: ["http://localhost:3000", "http://127.0.0.1:3000"],
+  origin: ["http://localhost:3000", 
+           "http://127.0.0.1:3000"
+           "http://adaptlearn-frontend.onrender.com"],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
